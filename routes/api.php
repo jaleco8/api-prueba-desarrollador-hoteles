@@ -18,8 +18,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group([
-    "prefix" => "v1",
-    "namespace" => "Api/V1"
-], function() {
-
+    'prefix' => 'v1',
+    'namespace'=> 'Api\V1'
+], function () {
+    Route::apiResources([
+        'clients' => 'ClientController',
+        'rooms' => 'RoomController',
+        'bookings' => 'BookingController'
+    ]);
 });
