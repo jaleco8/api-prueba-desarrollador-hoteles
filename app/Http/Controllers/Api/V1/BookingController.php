@@ -39,7 +39,7 @@ class BookingController extends Controller
      */
     public function show(Booking $booking)
     {
-        //
+        return response()->json(['data' => $booking], 200);
     }
 
     /**
@@ -51,7 +51,8 @@ class BookingController extends Controller
      */
     public function update(Request $request, Booking $booking)
     {
-        //
+        $booking->update($request->all());
+        return response()->json(['data' => $booking], 200);
     }
 
     /**

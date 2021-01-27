@@ -39,7 +39,7 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
-        //
+        return response()->json(['data' => $client], 200);
     }
 
     /**
@@ -51,7 +51,8 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        //
+        $client->update($request->all());
+        return response()->json(['data' => $client ], 200);
     }
 
     /**

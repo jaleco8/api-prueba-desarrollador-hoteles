@@ -39,7 +39,7 @@ class RoomController extends Controller
      */
     public function show(Room $room)
     {
-        //
+        return response()->json(['data' => $room], 200);
     }
 
     /**
@@ -51,7 +51,8 @@ class RoomController extends Controller
      */
     public function update(Request $request, Room $room)
     {
-        //
+        $room->update($request->all());
+        return response()->json(['data' => $room], 200);
     }
 
     /**

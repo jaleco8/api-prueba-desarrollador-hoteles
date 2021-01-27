@@ -40,4 +40,44 @@ class RoomTest extends TestCase
             ]
         ]);
     }
+
+    /**
+     * @test
+     */
+    public function updates_room()
+    {
+        $data = [
+            'price' => $this->faker->randomFloat(2, 50, 100)
+        ];
+
+        $room = create('App\Models\Room');
+
+        $response = $this->json('PUT', $this->baseUrl . "rooms/{$room->id}", $data);
+        $response->assertStatus(200);
+
+        $room = $room->fresh();
+
+        $this->assertEquals($room->price, $data['price']);
+    }
+
+    /**
+     * @test
+     */
+    public function shows_booking()
+    {
+        $room = create('App\Models\Room');
+
+        $response = $this->json('GET', $this->baseUrl . "rooms/{$room->id}");
+        $response->assertStatus(200);
+
+        $response->assertJson([
+            'data' => [
+                'id' => $room->id,
+                'name' => $room->name,
+                'description' => $room->description,
+                'capacity' => $room->capacity,
+                'price' => $room->price
+            ]
+        ]);        
+    }
 }
