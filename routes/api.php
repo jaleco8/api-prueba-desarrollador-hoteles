@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group([
     'prefix' => 'v1',
-    'namespace'=> 'Api\V1',
+    'namespace' => 'Api\V1',
     "middleware" => ['auth:api']
 ], function () {
     Route::apiResources([
@@ -27,6 +27,12 @@ Route::group([
         'rooms' => 'RoomController',
         'bookings' => 'BookingController'
     ]);
+
+    Route::get('bookings/{booking}/relationships/client', 'BookingRelationShipController@client')->name('bookings.relationships.client');
+    Route::get('bookings/{booking}/client', 'BookingRelationShipController@client')->name('bookings.client');
+
+    Route::get('bookings/{booking}/relationships/room', 'BookingRelationShipController@room')->name('bookings.relationships.room');
+    Route::get('bookings/{booking}/room', 'BookingRelationShipController@room')->name('bookings.room');
 });
 
 Route::post('login', 'Api\V1\AuthController@login');

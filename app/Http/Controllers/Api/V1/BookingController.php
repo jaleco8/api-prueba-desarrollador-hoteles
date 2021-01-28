@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Resources\BookingResource;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingRequest;
+use App\Http\Resources\BookingCollection;
+use Auth;
 
 class BookingController extends Controller
 {
@@ -16,7 +19,7 @@ class BookingController extends Controller
      */
     public function index()
     {
-        //
+        return new BookingCollection(Booking::all());
     }
 
     /**
@@ -28,7 +31,8 @@ class BookingController extends Controller
     public function store(BookingRequest $request)
     {
         $booking = Booking::create($request->all());
-        return response()->json(['data' => $booking], 201);
+        BookingResource::withoutWrapping();
+        return new BookingResource($booking);
     }
 
     /**
@@ -39,7 +43,8 @@ class BookingController extends Controller
      */
     public function show(Booking $booking)
     {
-        return response()->json(['data' => $booking], 200);
+        BookingResource::withoutWrapping();
+        return new BookingResource($booking);
     }
 
     /**
@@ -51,8 +56,14 @@ class BookingController extends Controller
      */
     public function update(Request $request, Booking $booking)
     {
-        $booking->update($request->all());
-        return response()->json(['data' => $booking], 200);
+        $user = Auth::user();
+        if ($user->isAdmin()) {
+            $booking->update($request->all());
+            BookingResource::withoutWrapping();
+            return new BookingResource($booking);
+        } else {
+            return response()->json(['error' => "No tiene Permisos para realizar esta operacion"], 401);
+        }
     }
 
     /**
