@@ -19,7 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group([
     'prefix' => 'v1',
-    'namespace'=> 'Api\V1'
+    'namespace'=> 'Api\V1',
+    "middleware" => ['auth:api']
 ], function () {
     Route::apiResources([
         'clients' => 'ClientController',
@@ -27,3 +28,6 @@ Route::group([
         'bookings' => 'BookingController'
     ]);
 });
+
+Route::post('login', 'Api\V1\AuthController@login');
+Route::post('signup', 'Api\V1\AuthController@signup');
